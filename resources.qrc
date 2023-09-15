@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/resources">
+        <file>images/vinagamma.jpg</file>
+        <file>images/vinaIcon.ico</file>
+    </qresource>
+</RCC>
