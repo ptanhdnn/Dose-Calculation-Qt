@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>table_data</class>
+ <widget class="QWidget" name="table_data">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>716</width>
+    <height>460</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <widget class="QTableWidget" name="tableWidget">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>50</y>
+     <width>691</width>
+     <height>321</height>
+    </rect>
+   </property>
+   <column>
+    <property name="text">
+     <string>Ngày</string>
+    </property>
+   </column>
+   <column>
+    <property name="text">
+     <string>Công ty</string>
+    </property>
+   </column>
+   <column>
+    <property name="text">
+     <string>Loại hàng</string>
+    </property>
+   </column>
+   <column>
+    <property name="text">
+     <string>Số lượng</string>
+    </property>
+   </column>
+   <column>
+    <property name="text">
+     <string>Liều yêu cầu</string>
+    </property>
+   </column>
+   <column>
+    <property name="text">
+     <string>Thời gian chiếu</string>
+    </property>
+   </column>
+   <column>
+    <property name="text">
+     <string>Chú ý</string>
+    </property>
+   </column>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

@@ -4,6 +4,9 @@
 #include "QDateTime"
 #include "QIcon"
 
+#include "table_data.h"
+#include "savecustomer.h"
+
 DoseCaluculation::DoseCaluculation(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::DoseCaluculation)
@@ -28,6 +31,10 @@ DoseCaluculation::DoseCaluculation(QWidget *parent)
     QObject::connect(timer, &QTimer::timeout, this, &DoseCaluculation::timerEvent);
     timer->start(1000);
 
+    SaveCustomer *saveCustomer;
+    table_data *tblData;
+
+
     // Tính hoạt độ của các bản nguồn
     TgianBanRa = QDate(2021, 1, 6).daysTo(QDate::currentDate())/365.0;
     ActivityR1 = 64.9 * exp(-TgianBanRa * 0.693147181 / 5.27);
@@ -41,7 +48,9 @@ DoseCaluculation::DoseCaluculation(QWidget *parent)
     QObject::connect(ui->R1, &QCheckBox::stateChanged, this, &DoseCaluculation::on_R1_stateChanged);
     QObject::connect(ui->R2, &QCheckBox::stateChanged, this, &DoseCaluculation::on_R2_stateChanged);
     QObject::connect(ui->R3, &QCheckBox::stateChanged, this, &DoseCaluculation::on_R3_stateChanged);
-    QObject::connect(ui->calculateTime, &QPushButton::clicked, this, &DoseCaluculation::on_calculateTime_clicked);
+
+    QObject::connect(ui->mass, &QLineEdit::textChanged, this, &DoseCaluculation::on_time_calculated);
+    QObject::connect(ui->dose, &QLineEdit::textChanged, this, &DoseCaluculation::on_time_calculated);
 }
 
 DoseCaluculation::~DoseCaluculation()
@@ -49,34 +58,31 @@ DoseCaluculation::~DoseCaluculation()
     delete ui;
 }
 
-
-void DoseCaluculation::on_calculateTime_clicked()
+void DoseCaluculation::on_time_calculated()
 {
     float num_mass = ui->mass->text().toFloat();
-    float num_dose   = ui->dose->text().toFloat();
+    num_dose   = ui->dose->text().toFloat();
 
     // Kiểm tra chọn hoạt độ nguồn chưa
     if (!ui->R1->isChecked() && !ui->R2->isChecked() && !ui->R3->isChecked()) {
-        QMessageBox::information(this, "No Selection", "Chưa chọn hoạt độ nguồn R");
+        QMessageBox::information(this, "No Selection", "Chọn hoạt độ nguồn R trước");
         return;
     }
 
     double totalActivity = 0.85 * (TrueActy1 + TrueActy2 + TrueActy3);
-
-    ui->text_activity2->setText(QString::number(totalActivity, 'f', 2) + "kCi");
 
     float weight = num_mass/280 ;
     double doseMean = 0.4026 * weight * weight - 0.8449 * weight + 0.6405;
 
     double time = 60 * (num_dose / (doseMean * totalActivity / 100));   // Đơn vị tính theo phút
     double timeMinute = static_cast<int>((time - 60 * (static_cast<int>(time) / 60)) / 5) * 5;
+    irradiationTime = QString::number(static_cast<int>(time) / 60) + " giờ " + QString::number(timeMinute) + " phút";
 
-    ui->text_result->setText(QString::number(static_cast<int>(time) / 60) + " gio " + QString::number(timeMinute) + " phut");
+    ui->text_result->setText(irradiationTime);
 
     double doseCalculated = doseMean * (timeMinute + 60 * (static_cast<int>(time) / 60)) * totalActivity / (60 * 100);
     ui->lbl_dose_recalculated->setText("<font color='red'><b>" + QString::number(doseCalculated, 'f', 2) + " kGy" + "</font>");
 }
-
 
 void DoseCaluculation::on_R1_stateChanged(int arg1)
 {
@@ -91,7 +97,6 @@ void DoseCaluculation::on_R1_stateChanged(int arg1)
     }
 }
 
-
 void DoseCaluculation::on_R2_stateChanged(int arg2)
 {
     if (arg2 == Qt::Checked) {
@@ -104,7 +109,6 @@ void DoseCaluculation::on_R2_stateChanged(int arg2)
         TrueActy2 = 0.0;
     }
 }
-
 
 void DoseCaluculation::on_R3_stateChanged(int arg3)
 {
@@ -119,7 +123,6 @@ void DoseCaluculation::on_R3_stateChanged(int arg3)
     }
 }
 
-
 void DoseCaluculation::on_actioninfo_triggered()
 {
     QMessageBox::information(this, "About", "Chuong trinh chi su dung cho may SVST-Co60B\n"
@@ -132,5 +135,35 @@ void DoseCaluculation::on_actioninfo_triggered()
 void DoseCaluculation::timerEvent()
 {
     ui->lbl_currentTime->setText(QDateTime::currentDateTime().toString("dddd, MMMM d hh:mm:ss"));
+}
+
+void DoseCaluculation::on_btn_save_clicked()
+{
+    save = new SavePackage(this, irradiationTime, num_dose);
+    save->show();
+//    QString name = "Đây là tiếng việt";
+//    qDebug() << name;
+}
+
+QString DoseCaluculation::getIrradiationTime() const
+{
+    return irradiationTime;
+}
+
+float DoseCaluculation::getNumDose() const
+{
+    return num_dose;
+}
+
+void DoseCaluculation::on_action_hisCustom_triggered()
+{
+
+}
+
+
+void DoseCaluculation::on_action_histoDose_triggered()
+{
+    tbl_data = new table_data(this);
+    tbl_data->show();
 }
 
