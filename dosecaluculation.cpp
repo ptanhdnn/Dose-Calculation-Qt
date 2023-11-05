@@ -3,14 +3,46 @@
 
 #include "QDateTime"
 #include "QIcon"
-
-#include "table_data.h"
-#include "savecustomer.h"
+#include "QFileDialog"
+#include "QDir"
 
 DoseCaluculation::DoseCaluculation(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::DoseCaluculation)
 {
+    DatabaseConfig databaseConfig;
+    QString dataPath = databaseConfig.databaseFolderPath();
+
+    if (!dataPath.isEmpty()) {
+        qDebug() << "Database folder path: " << dataPath;
+    } else {
+        qDebug() << "Database folder path is not set.";
+        QMessageBox::information(
+            nullptr,
+            "Database Information",
+            "Không tìm thấy cơ sở dữ liệu \n chương trình sẽ khởi tạo dữ liệu tại đường dẫn này!"
+            );
+        dataPath = setDataPathByUser();
+
+        QMessageBox::information(
+            nullptr,
+            "Database Information",
+            "Đã tạo xong cơ sở dữ liệu!"
+            );
+    }
+
+    qDebug() << "Check database was existed";
+    db_manager = new dataManager();
+    qDebug() << "Initialize db_ptr";
+    QString databasePath = "/databases/DosePackageManager.db";
+    QDir directory(databasePath);
+    if(!directory.exists()){
+        qDebug() << "database file was not exist";
+        db_manager->createDatabase();
+        qDebug() << "am not sure";
+    };
+    qDebug() << "Checked!!!";
+
     ui->setupUi(this);
 
     // Khởi tạo các checkR
@@ -30,10 +62,6 @@ DoseCaluculation::DoseCaluculation(QWidget *parent)
     QTimer* timer = new QTimer(this);
     QObject::connect(timer, &QTimer::timeout, this, &DoseCaluculation::timerEvent);
     timer->start(1000);
-
-    SaveCustomer *saveCustomer;
-    table_data *tblData;
-
 
     // Tính hoạt độ của các bản nguồn
     TgianBanRa = QDate(2021, 1, 6).daysTo(QDate::currentDate())/365.0;
@@ -56,6 +84,20 @@ DoseCaluculation::DoseCaluculation(QWidget *parent)
 DoseCaluculation::~DoseCaluculation()
 {
     delete ui;
+}
+
+QString DoseCaluculation::setDataPathByUser()
+{
+    QFileDialog fileDialog;
+    fileDialog.setFileMode(QFileDialog::AnyFile);
+    fileDialog.setOption(QFileDialog::ShowDirsOnly, true);
+
+    // Get the database folder path from the user.
+    QString databaseFolderPath = fileDialog.getExistingDirectory();
+
+    // Convert the relative path to the database folder to an absolute path.
+    QString absolutePath = QDir::cleanPath(QDir::currentPath() + "/" + databaseFolderPath);
+    return absolutePath;
 }
 
 void DoseCaluculation::on_time_calculated()
@@ -125,11 +167,11 @@ void DoseCaluculation::on_R3_stateChanged(int arg3)
 
 void DoseCaluculation::on_actioninfo_triggered()
 {
-    QMessageBox::information(this, "About", "Chuong trinh chi su dung cho may SVST-Co60B\n"
-                                            "Ap dung cho nguon nap ngay 26/12/2020 (-10%)\n"
-                                            "\nLuu y: Vi tri dat lieu ke khong phai la vi tri Dmin\n"
-                                            "Thung hang co kich thuoc 48 x 65 x 90 cm\n"
-                                            "\nPhong Van hanh may Cobalt 2023");
+    QMessageBox::information(this, "About", "Chưong trình chỉ sử dụng cho máy SVST-Co60B\n"
+                                            "Áp dụng cho nguồn nạp ngày 26/12/2020 (-10%)\n"
+                                            "\nLuu y: Vị trí đặt liều kế không phải Dmin\n"
+                                            "Thùng hàng có kích thước 48 x 65 x 90 cm\n"
+                                            "\nPhòng vận hành máy Cobalt 2023");
 }
 
 void DoseCaluculation::timerEvent()
@@ -157,7 +199,8 @@ float DoseCaluculation::getNumDose() const
 
 void DoseCaluculation::on_action_hisCustom_triggered()
 {
-
+    tbl_customer = new Customer_table(this);
+    tbl_customer->show();
 }
 
 

@@ -1,3 +1,6 @@
+/*
+ * Tạo bảng để xuất dữ liệu về lịch sử chiếu xạ
+*/
 #ifndef TABLE_DATA_H
 #define TABLE_DATA_H
 
@@ -15,6 +18,9 @@ class table_data : public QWidget
 public:
     explicit table_data(QWidget *parent = nullptr, const QString &irradiationTime = "");
     ~table_data();
+
+private slots:
+    void onCloseButtonClicked();
 
 private:
     Ui::table_data *ui;

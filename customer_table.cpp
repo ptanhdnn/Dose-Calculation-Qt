@@ -1,37 +1,43 @@
-#include "table_data.h"
-#include "ui_table_data.h"
+#include "customer_table.h"
+#include "ui_customer_table.h"
+
 #include <QVBoxLayout>
 #include <QHeaderView>
 #include <QPushButton>
 #include <QTableView>
 
-table_data::table_data(QWidget *parent, const QString& irradiationTime) :
-    QWidget(parent),
-    ui(new Ui::table_data)
+Customer_table::Customer_table(QWidget *parent) :
+    QDialog(parent),
+    ui(new Ui::Customer_table)
 {
     ui->setupUi(this);
-    this->setWindowTitle("Lịch sử chiếu xạ");
+    this->setWindowTitle("Danh sách khách hàng");
 
+    // Make the window resizable
     this->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
 
     database = QSqlDatabase::addDatabase("QSQLITE", "save_package");
-    database.setDatabaseName("../DoseCalculation/databases/DosePackageManager.db");
+    QString dbPath = getenv("DATABASE_PATH");
+    database.setDatabaseName(dbPath + "/DosePackageManager.db");
 
     if (!database.open()) {
         qDebug() << "Failed to open database: " << database.lastError().text();
         return;
     }
+
+    // Create a query model
     model = new QSqlQueryModel(this);
 
     // Set the query for the model
     QSqlQuery query(database);
-    query.prepare("SELECT * FROM DoseCustomer ORDER BY id DESC LIMIT 20");
+    query.prepare("SELECT * FROM CustomerPackage ORDER BY id DESC LIMIT 20");
 
     if (!query.exec()) {
         qDebug() << "Failed to execute query: " << query.lastError().text();
         return;
     }
 
+    // Populate the model with the query result
     model->setQuery(std::move(query));
 
     // Create a table view and set the model
@@ -43,7 +49,7 @@ table_data::table_data(QWidget *parent, const QString& irradiationTime) :
 
     // Create a close button
     QPushButton *closeButton = new QPushButton("Close", this);
-    connect(closeButton, &QPushButton::clicked, this, &table_data::onCloseButtonClicked);
+    connect(closeButton, &QPushButton::clicked, this, &Customer_table::onCloseButtonClicked);
 
     closeButton->setStyleSheet("QPushButton {"
                                "  background-color: #FF5733;" // Background color
@@ -51,11 +57,11 @@ table_data::table_data(QWidget *parent, const QString& irradiationTime) :
                                "  border: 2px solid #D32F2F;" // Border style
                                "  border-radius: 5px;"        // Border radius
                                "  padding: 5px 10px;"          // Padding
-//                               "}"
+                               "}"
 
                                // Mouse hover effect
-//                               "QPushButton:hover {"
-//                               "  background-color: #D32F2F;"
+                               "QPushButton:hover {"
+                               "  background-color: #D32F2F;"
                                "}");
 
     // Create a layout for the table view and button
@@ -79,13 +85,13 @@ table_data::table_data(QWidget *parent, const QString& irradiationTime) :
     database.close();
 }
 
-table_data::~table_data()
+Customer_table::~Customer_table()
 {
     delete ui;
     delete model;
 }
 
-void table_data::onCloseButtonClicked()
+void Customer_table::onCloseButtonClicked()
 {
     close();
 }

@@ -1,3 +1,13 @@
+/*
+ * Cửa sổ chính của chương trình
+ *
+ * Tính toán liều chiếu dựa trên sự lựa chọn các bản nguồn,
+ * sau đó có thể lưu nếu có nhu cầu.
+ * Ngoài ra, các trên các thanh menu có thể theo dõi lại lịch
+ * sử chiếu xạ, danh sách khách hàng và thông tin về nguồn.
+ *
+*/
+
 #ifndef DOSECALUCULATION_H
 #define DOSECALUCULATION_H
 
@@ -12,9 +22,13 @@
 #include <QDebug>
 #include <QMessageBox>
 #include <QPixmap>
+#include <QDir>
 
 #include "savepackage.h"
 #include "table_data.h"
+#include "customer_table.h"
+#include "datamanager.h"
+#include "databaseconfig.h"
 
 
 QT_BEGIN_NAMESPACE
@@ -69,7 +83,10 @@ private:
 
     SavePackage *save;
     table_data *tbl_data;
-
+    Customer_table *tbl_customer;
+    dataManager *db_manager;
+//    DatabaseConfig databaseConfig;
+    QString setDataPathByUser();
 
 };
 #endif // DOSECALUCULATION_H

@@ -1,3 +1,12 @@
+/*
+ * Tạo bảng biểu mẫu để điền thông tin về khách hàng,
+ * liều chiếu, thời gian chiếu và các ghi chú nếu có.
+ * Sau đó, sẽ lưu lại thông tin vào database, trong
+ * đó có kiểm tra sẽ thêm mới vào danh sách khách hàng
+ * nếu là khách hàng mới.
+ *
+*/
+
 #ifndef SAVEPACKAGE_H
 #define SAVEPACKAGE_H
 

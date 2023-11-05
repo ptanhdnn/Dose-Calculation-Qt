@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>table_data</class>
- <widget class="QWidget" name="table_data">
+ <class>Customer_table</class>
+ <widget class="QDialog" name="Customer_table">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>983</width>
-    <height>442</height>
+    <width>570</width>
+    <height>449</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Form</string>
+   <string>Dialog</string>
   </property>
  </widget>
  <resources/>
