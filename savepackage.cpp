@@ -22,11 +22,15 @@ SavePackage::SavePackage(QWidget *parent, const QString& irradiationTime, float 
     companyCompleter = new QCompleter(this);
     packageTypeCompleter = new QCompleter(this);
 
-    db_customer = QSqlDatabase::addDatabase("QSQLITE", "add_package");
-    QString dbPath = getenv("DATABASE_PATH");
-    db_customer.setDatabaseName(dbPath + "/DosePackageManager.db");
+    // sử dụng khi deploy app
+    //    QString databasePath = dataPath.getAppPath();
+    //    database = QSqlDatabase::addDatabase("QSQLITE", "save_package");
+    //    database.setDatabaseName(databasePath);
 
-    if (!QFile::exists(dbPath + "/DosePackageManager.db")) {
+    db_customer = QSqlDatabase::addDatabase("QSQLITE", "add_package");
+    db_customer.setDatabaseName("D:/project/test/databases/DosePackageManager.db");
+
+    if (!QFile::exists("D:/project/test/databases/DosePackageManager.db")) {
         QMessageBox::warning(this, "File Not Found", "Không tìm thấy database file");
     }
 
@@ -105,9 +109,12 @@ void SavePackage::on_btn_save_clicked()
 
     QSqlDatabase::removeDatabase("add_package");
     // Liên kết với database
+    // sử dụng khi deploy app
+    //    QString databasePath = dataPath.getAppPath();
+    //    database = QSqlDatabase::addDatabase("QSQLITE", "save_package");
+    //    database.setDatabaseName(databasePath);
     dataBase = QSqlDatabase::addDatabase("QSQLITE", "save_package");
-    QString dbPath = getenv("DATABASE_PATH");
-    dataBase.setDatabaseName(dbPath + "/DosePackageManager.db");
+    dataBase.setDatabaseName("D:/project/test/databases/DosePackageManager.db");
 
     if (dataBase.open()) {
         QSqlQuery query(dataBase);
@@ -133,7 +140,7 @@ void SavePackage::on_btn_save_clicked()
     }
 
     // Check if the database file exists
-    if (!QFile::exists(dbPath + "/DosePackageManager.db")) {
+    if (!QFile::exists("D:/project/test/databases/DosePackageManager.db")) {
         qDebug() << "Database file does not exist.";
         return;
     }
@@ -144,9 +151,13 @@ void SavePackage::on_btn_save_clicked()
     }
     qDebug() << "prepare to open database";
 
+    // sử dụng khi deploy app
+    //    QString databasePath = dataPath.getAppPath();
+    //    database = QSqlDatabase::addDatabase("QSQLITE", "save_package");
+    //    database.setDatabaseName(databasePath);
     // Open the database
     db_customer = QSqlDatabase::addDatabase("QSQLITE", "add_package");
-    db_customer.setDatabaseName(dbPath + "/DosePackageManager.db");
+    db_customer.setDatabaseName("D:/project/test/databases/DosePackageManager.db");
 
 
     // Check if the database is open

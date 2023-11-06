@@ -10,39 +10,6 @@ DoseCaluculation::DoseCaluculation(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::DoseCaluculation)
 {
-    DatabaseConfig databaseConfig;
-    QString dataPath = databaseConfig.databaseFolderPath();
-
-    if (!dataPath.isEmpty()) {
-        qDebug() << "Database folder path: " << dataPath;
-    } else {
-        qDebug() << "Database folder path is not set.";
-        QMessageBox::information(
-            nullptr,
-            "Database Information",
-            "Không tìm thấy cơ sở dữ liệu \n chương trình sẽ khởi tạo dữ liệu tại đường dẫn này!"
-            );
-        dataPath = setDataPathByUser();
-
-        QMessageBox::information(
-            nullptr,
-            "Database Information",
-            "Đã tạo xong cơ sở dữ liệu!"
-            );
-    }
-
-    qDebug() << "Check database was existed";
-    db_manager = new dataManager();
-    qDebug() << "Initialize db_ptr";
-    QString databasePath = "/databases/DosePackageManager.db";
-    QDir directory(databasePath);
-    if(!directory.exists()){
-        qDebug() << "database file was not exist";
-        db_manager->createDatabase();
-        qDebug() << "am not sure";
-    };
-    qDebug() << "Checked!!!";
-
     ui->setupUi(this);
 
     // Khởi tạo các checkR
@@ -84,20 +51,6 @@ DoseCaluculation::DoseCaluculation(QWidget *parent)
 DoseCaluculation::~DoseCaluculation()
 {
     delete ui;
-}
-
-QString DoseCaluculation::setDataPathByUser()
-{
-    QFileDialog fileDialog;
-    fileDialog.setFileMode(QFileDialog::AnyFile);
-    fileDialog.setOption(QFileDialog::ShowDirsOnly, true);
-
-    // Get the database folder path from the user.
-    QString databaseFolderPath = fileDialog.getExistingDirectory();
-
-    // Convert the relative path to the database folder to an absolute path.
-    QString absolutePath = QDir::cleanPath(QDir::currentPath() + "/" + databaseFolderPath);
-    return absolutePath;
 }
 
 void DoseCaluculation::on_time_calculated()

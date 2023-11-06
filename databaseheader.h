@@ -12,4 +12,12 @@
 #include <QSqlTableModel>
 #include <QSqlQuery>
 
+class dataHeader
+{
+public:
+    dataHeader();
+
+    QString getAppPath();
+};
+
 #endif // DATABASEHEADER_H

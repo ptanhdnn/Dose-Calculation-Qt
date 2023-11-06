@@ -16,9 +16,13 @@ Customer_table::Customer_table(QWidget *parent) :
     // Make the window resizable
     this->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
 
+    // sử dụng khi deploy app
+    //    QString databasePath = dataPath.getAppPath();
+    //    database = QSqlDatabase::addDatabase("QSQLITE", "save_package");
+    //    database.setDatabaseName(databasePath);
+
     database = QSqlDatabase::addDatabase("QSQLITE", "save_package");
-    QString dbPath = getenv("DATABASE_PATH");
-    database.setDatabaseName(dbPath + "/DosePackageManager.db");
+    database.setDatabaseName("D:/project/test/databases/DosePackageManager.db");
 
     if (!database.open()) {
         qDebug() << "Failed to open database: " << database.lastError().text();
