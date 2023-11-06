@@ -14,8 +14,6 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets Sql)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets Sql)
 
-set(DATABASE_PATH "${CMAKE_INSTALL_PREFIX}/databases")
-
 set(PROJECT_SOURCES
         main.cpp
         dosecaluculation.cpp
@@ -33,7 +31,10 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         databaseheader.h
         customer_table.h customer_table.cpp customer_table.ui
         datamanager.h datamanager.cpp
-        databaseconfig.h databaseconfig.cpp
+        databaseheader.cpp
+        importpackage.h importpackage.cpp importpackage.ui
+
+
 
 
     )

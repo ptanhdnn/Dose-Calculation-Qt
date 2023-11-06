@@ -6,16 +6,20 @@
 #include <QTableView>
 
 table_data::table_data(QWidget *parent, const QString& irradiationTime) :
-    QWidget(parent),
+    QDialog(parent),
     ui(new Ui::table_data)
 {
     ui->setupUi(this);
     this->setWindowTitle("Lịch sử chiếu xạ");
 
     this->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
+//  // sử dụng khi deploy app
+//    QString databasePath = dataPath.getAppPath();
+//    database = QSqlDatabase::addDatabase("QSQLITE", "save_package");
+//    database.setDatabaseName(databasePath);
 
     database = QSqlDatabase::addDatabase("QSQLITE", "save_package");
-    database.setDatabaseName("../DoseCalculation/databases/DosePackageManager.db");
+    database.setDatabaseName("D:/project/test/databases/DosePackageManager.db");
 
     if (!database.open()) {
         qDebug() << "Failed to open database: " << database.lastError().text();

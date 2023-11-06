@@ -4,14 +4,14 @@
 #ifndef TABLE_DATA_H
 #define TABLE_DATA_H
 
-#include <QWidget>
+#include <QDialog>
 #include "databaseheader.h"
 
 namespace Ui {
 class table_data;
 }
 
-class table_data : public QWidget
+class table_data : public QDialog
 {
     Q_OBJECT
 
@@ -27,7 +27,7 @@ private:
 
     QSqlDatabase database;
     QSqlQueryModel *model;
-
+    dataHeader dataPath;
 
 };
 

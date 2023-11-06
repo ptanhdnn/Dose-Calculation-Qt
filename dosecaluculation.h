@@ -28,7 +28,7 @@
 #include "table_data.h"
 #include "customer_table.h"
 #include "datamanager.h"
-#include "databaseconfig.h"
+#include "databaseheader.h"
 
 
 QT_BEGIN_NAMESPACE
@@ -85,8 +85,7 @@ private:
     table_data *tbl_data;
     Customer_table *tbl_customer;
     dataManager *db_manager;
-//    DatabaseConfig databaseConfig;
-    QString setDataPathByUser();
+    dataHeader dataPath;
 
 };
 #endif // DOSECALUCULATION_H

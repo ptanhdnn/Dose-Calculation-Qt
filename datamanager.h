@@ -11,6 +11,8 @@ public:
     void createDatabase();
     void insertCustomerPackage();
     void insertDoseCustomer();
+
+    QString dataPath;
 };
 
 #endif // DATAMANAGER_H

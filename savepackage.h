@@ -55,6 +55,7 @@ private:
 
     QSqlDatabase db_customer;
     QSqlDatabase dataBase;
+    dataHeader dataPath;
 
 };
 
